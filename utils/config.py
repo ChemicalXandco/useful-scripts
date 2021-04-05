@@ -1,5 +1,6 @@
 import re
 from typing import Callable, Optional
+from pathlib import Path
 
 def read(func):
     """
@@ -17,7 +18,7 @@ def read(func):
 
 class ConfigEditor():
     def __init__(self, cfg_file: str, comment_str: str = '#'):
-        self._cfg_file = cfg_file
+        self._cfg_file = Path(cfg_file).expanduser()
         self._comment_str = comment_str.strip()
 
     def __enter__(self):
@@ -48,7 +49,7 @@ class ConfigEditor():
             print('uncommented', content)
             return
         elif content_start != -1:
-            print('line', content, 'already exists')
+            print('line "', content, '" already exists')
             return
         if under:
             if match := file_contents.find(under) != -1:
@@ -62,6 +63,7 @@ class ConfigEditor():
         else:
             insert_point = 0
         self._insert(content+'\n', insert_point)
+        print('added line', content)
 
     @read
     def for_each(self, regex: re.Pattern, function: Callable[[int], None], file_contents=''):
