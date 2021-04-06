@@ -1,6 +1,5 @@
 import re
 from typing import Callable, Optional
-from pathlib import Path
 
 def read(func):
     """
@@ -18,7 +17,7 @@ def read(func):
 
 class ConfigEditor():
     def __init__(self, cfg_file: str, comment_str: str = '#'):
-        self._cfg_file = Path(cfg_file).expanduser()
+        self._cfg_file = cfg_file
         self._comment_str = comment_str.strip()
 
     def __enter__(self):
@@ -70,7 +69,6 @@ class ConfigEditor():
         """
         Replace a line.
         Use \\n for multiple lines.
-        Prints and ends if the desired content already exists in the file.
         Prints and ends if the line(s) to replace cannot be found.
 
         Args:

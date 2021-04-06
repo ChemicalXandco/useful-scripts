@@ -1,6 +1,8 @@
+from pathlib import Path
+
 from bash import history, python
 
-bashrc = '~/.bashrc'
+bashrc = str(Path('~/.bashrc').expanduser())
 
 def run():
     history.run()
