@@ -108,15 +108,15 @@ b = 2
 """
 )
 
-def test_add_line():
+def test_add():
     with heading as cfg_test:
         with ConfigEditor(_cfg_file) as cfg_edit:
-            cfg_edit.add_line('a = 1')
+            cfg_edit.add('a = 1')
             cfg_test._verify_cfg_file(heading.cfg)
 
     with heading as cfg_test:
         with ConfigEditor(_cfg_file) as cfg_edit:
-            cfg_edit.add_line('b = 2')
+            cfg_edit.add('b = 2')
             cfg_test._verify_cfg_file("""
 # options
 a = 1
@@ -126,7 +126,7 @@ b = 2
 
     with heading as cfg_test:
         with ConfigEditor(_cfg_file) as cfg_edit:
-            cfg_edit.add_line('c = 3', under='# options')
+            cfg_edit.add('c = 3', under='# options')
             cfg_test._verify_cfg_file("""
 # options
 c = 3
@@ -137,7 +137,7 @@ a = 1
 
     with heading as cfg_test:
         with ConfigEditor(_cfg_file) as cfg_edit:
-            cfg_edit.add_line('c = 3', under='# nonexistent options')
+            cfg_edit.add('c = 3', under='# nonexistent options')
             cfg_test._verify_cfg_file("""# nonexistent options
 c = 3
 
@@ -146,3 +146,24 @@ a = 1
 # b = 2
 """
 )
+
+def test_replace():
+    with heading as cfg_test:
+        with ConfigEditor(_cfg_file) as cfg_edit:
+            cfg_edit.replace('a = 1', 'a = 2')
+            cfg_test._verify_cfg_file("""
+# options
+a = 2
+# b = 2
+"""
+)
+
+    with heading as cfg_test:
+        with ConfigEditor(_cfg_file) as cfg_edit:
+            cfg_edit.replace('a = 2', 'a = 3')
+            cfg_test._verify_cfg_file(heading.cfg)
+
+    with heading as cfg_test:
+        with ConfigEditor(_cfg_file) as cfg_edit:
+            cfg_edit.replace('', 'a = 2')
+            cfg_test._verify_cfg_file(heading.cfg)

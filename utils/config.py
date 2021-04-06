@@ -31,9 +31,9 @@ class ConfigEditor():
         print(self._cfg_file, 'successfully edited')
 
     @read
-    def add_line(self, content: str, under: Optional[str] = None, file_contents=''):
+    def add(self, content: str, under: Optional[str] = None, file_contents=''):
         """
-        Add a line to a config file.
+        Add a line.
         The line will be added under a heading if under is set.
         If the heading does not exist it will be created.
         Use \\n for multiple lines.
@@ -52,7 +52,7 @@ class ConfigEditor():
             print('line "', content, '" already exists')
             return
         if under:
-            if match := file_contents.find(under) != -1:
+            if (match := file_contents.find(under)) != -1:
                 insert_point = match + len(under) + 1
             else:
                 print('could not find heading', under)
@@ -64,6 +64,28 @@ class ConfigEditor():
             insert_point = 0
         self._insert(content+'\n', insert_point)
         print('added line', content)
+
+    @read
+    def replace(self, content: str, with_this: str, file_contents=''):
+        """
+        Replace a line.
+        Use \\n for multiple lines.
+        Prints and ends if the desired content already exists in the file.
+        Prints and ends if the line(s) to replace cannot be found.
+
+        Args:
+            content: the line(s) to replace
+            with_this: the line to add the content under as a regex
+        """
+        if not content:
+            print('nothing to replace')
+            return
+        if (content_start := file_contents.find(content)) == -1:
+            print('could not find the line(s) "', content, '" to replace')
+            return
+        self._write(file_contents[:content_start] + file_contents[content_start+len(content):])
+        self._insert(with_this, content_start)
+        print('replaced line(s) "', content, '" with "', with_this, '"')
 
     @read
     def for_each(self, regex: re.Pattern, function: Callable[[int], None], file_contents=''):
