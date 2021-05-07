@@ -1,0 +1,3 @@
+import neovim
+
+neovim.run()
