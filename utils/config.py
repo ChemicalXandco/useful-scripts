@@ -24,7 +24,14 @@ class ConfigEditor():
     def __enter__(self):
         if not os.path.isfile(self._cfg_file):
             print(self._cfg_file, 'does not exist, creating...')
+            try:
+                directory = os.path.dirname(self._cfg_file)
+                os.mkdir(directory)
+                print(directory, 'successfully created')
+            except FileExistsError:
+                pass
             open(self._cfg_file, 'w').close()
+
         print('Opening', self._cfg_file)
         self._io = open(self._cfg_file, 'r+')
         return self
