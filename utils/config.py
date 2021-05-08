@@ -1,3 +1,4 @@
+import os
 import re
 from typing import Callable, Optional
 
@@ -21,6 +22,9 @@ class ConfigEditor():
         self._comment_str = comment_str.strip()
 
     def __enter__(self):
+        if not os.path.isfile(self._cfg_file):
+            print(self._cfg_file, 'does not exist, creating...')
+            open(self._cfg_file, 'w').close()
         print('Opening', self._cfg_file)
         self._io = open(self._cfg_file, 'r+')
         return self
