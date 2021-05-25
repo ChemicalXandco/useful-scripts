@@ -41,7 +41,7 @@ class ConfigEditor():
         print(self._cfg_file, 'successfully edited')
 
     @read
-    def add(self, content: str, under: Optional[str] = None, file_contents=''):
+    def add(self, content: str, under: Optional[str]='', start: Optional[bool]=False, file_contents=''):
         """
         Add a line.
         The line will be added under a heading if under is set.
@@ -53,6 +53,7 @@ class ConfigEditor():
         Args:
             content: the line(s) to add
             under: the line to add the content under as a regex
+            start: add the line to the start of the file if `under` is not found
         """
         if self._is_comment(content_start := file_contents.find(content)):
             self.uncomment(content_start)
@@ -61,17 +62,22 @@ class ConfigEditor():
         elif content_start != -1:
             print('line "', content, '" already exists')
             return
+
+        if start:
+            insert_point = 0
+        else:
+            insert_point = len(file_contents)
+
         if under:
             if (match := file_contents.find(under)) != -1:
                 insert_point = match + len(under) + 1
             else:
                 print('could not find heading', under)
                 heading = under + '\n'
-                self._insert(heading, 0)
-                insert_point = len(heading)
+                self._insert(heading, insert_point)
+                insert_point += len(heading)
                 print('made new heading:', under)
-        else:
-            insert_point = 0
+
         self._insert(content+'\n', insert_point)
         print('added line', content)
 

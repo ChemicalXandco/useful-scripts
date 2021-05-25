@@ -138,6 +138,18 @@ a = 1
     with heading as cfg_test:
         with ConfigEditor(_cfg_file) as cfg_edit:
             cfg_edit.add('c = 3', under='# nonexistent options')
+            cfg_test._verify_cfg_file("""
+# options
+a = 1
+# b = 2
+# nonexistent options
+c = 3
+"""
+)
+
+    with heading as cfg_test:
+        with ConfigEditor(_cfg_file) as cfg_edit:
+            cfg_edit.add('c = 3', under='# nonexistent options', start=True)
             cfg_test._verify_cfg_file("""# nonexistent options
 c = 3
 

@@ -1,8 +1,11 @@
-from shutil import which
+import shutil
 
-def is_exe(name):
+def is_exe(name: str) -> bool:
     """Check whether `name` is on PATH and marked as executable."""
-    return which(name) is not None
+    detected = shutil.which(name) is not None
+    if detected:
+        print(f'Detected {name}')
+    return detected
 
 def do_nothing():
     pass
