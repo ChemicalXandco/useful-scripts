@@ -1,4 +1,4 @@
-import python
+from config import python
 from utils.config import ConfigEditor
 
 def run():

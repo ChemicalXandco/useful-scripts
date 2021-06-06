@@ -1,6 +1,6 @@
 import os
 
-import neovim
+from config import neovim
 from utils.config import ConfigEditor
 
 def run():

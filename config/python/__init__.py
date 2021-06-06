@@ -1,4 +1,4 @@
-from python import history
+from config.python import history
 from utils.env import dotfile_path, is_exe, do_nothing
 
 pythonrc = dotfile_path('.pythonrc')

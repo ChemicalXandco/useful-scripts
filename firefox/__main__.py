@@ -1,3 +1,0 @@
-import firefox
-
-firefox.run()

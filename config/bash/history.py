@@ -1,4 +1,4 @@
-import bash
+from config import bash
 from utils.config import ConfigEditor
 
 def run():

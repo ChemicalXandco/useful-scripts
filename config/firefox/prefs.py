@@ -1,6 +1,6 @@
 import os
 
-import firefox
+from config import firefox
 from utils.config import ConfigEditor
 
 def run():

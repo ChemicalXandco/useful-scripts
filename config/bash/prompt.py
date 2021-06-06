@@ -1,4 +1,4 @@
-import bash
+from config import bash
 from utils.config import ConfigEditor
 from utils.env import is_exe
 

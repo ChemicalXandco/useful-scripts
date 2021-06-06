@@ -1,9 +1,3 @@
-import bash
-import firefox
-import neovim
-import python
+import config
 
-bash.run()
-firefox.run()
-neovim.run()
-python.run()
+config.run()

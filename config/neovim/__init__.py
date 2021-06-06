@@ -1,6 +1,6 @@
 import os
 
-from neovim import init
+from config.neovim import init
 from utils.env import dotfile_path, is_exe, do_nothing
 
 root = dotfile_path('.config/nvim')

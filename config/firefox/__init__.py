@@ -1,7 +1,7 @@
 import configparser
 import os
 
-from firefox import prefs
+from config.firefox import prefs
 from utils.env import dotfile_path, is_exe, do_nothing
 
 def _run():

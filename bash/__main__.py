@@ -1,3 +1,0 @@
-import bash
-
-bash.run()
