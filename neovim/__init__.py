@@ -1,10 +1,9 @@
-from pathlib import Path
 import os
 
 from neovim import init
-from utils.env import is_exe, do_nothing
+from utils.env import dotfile_path, is_exe, do_nothing
 
-root = Path('~/.config/nvim').expanduser()
+root = dotfile_path('.config/nvim')
 
 def _run():
     init.run()

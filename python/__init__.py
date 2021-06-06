@@ -1,9 +1,7 @@
-from pathlib import Path
-
 from python import history
-from utils.env import is_exe, do_nothing
+from utils.env import dotfile_path, is_exe, do_nothing
 
-pythonrc = str(Path('~/.pythonrc').expanduser())
+pythonrc = dotfile_path('.pythonrc')
 
 def _run():
     history.run()

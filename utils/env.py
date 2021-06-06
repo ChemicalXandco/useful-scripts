@@ -1,4 +1,9 @@
+import pathlib
 import shutil
+
+def dotfile_path(fname: str) -> str:
+    """Get the full path of a dotfile in the ~/ directory."""
+    return str(pathlib.Path(f'~/{fname}').expanduser())
 
 def is_exe(name: str) -> bool:
     """Check whether `name` is on PATH and marked as executable."""

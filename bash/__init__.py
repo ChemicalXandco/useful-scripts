@@ -1,9 +1,7 @@
-from pathlib import Path
-
 from bash import alternative, history, prompt, python
-from utils.env import is_exe, do_nothing
+from utils.env import dotfile_path, is_exe, do_nothing
 
-bashrc = str(Path('~/.bashrc').expanduser())
+bashrc = dotfile_path('.bashrc')
 
 def _run():
     alternative.run()
