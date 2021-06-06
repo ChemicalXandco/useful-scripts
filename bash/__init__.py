@@ -1,11 +1,12 @@
 from pathlib import Path
 
-from bash import history, prompt, python
+from bash import alternative, history, prompt, python
 from utils.env import is_exe, do_nothing
 
 bashrc = str(Path('~/.bashrc').expanduser())
 
 def _run():
+    alternative.run()
     history.run()
     prompt.run()
     python.run()
