@@ -1,10 +1,11 @@
-from config.bash import alternative, history, prompt, python
+from config.bash import alternative, arguments, history, prompt, python
 from utils.env import dotfile_path, is_exe, do_nothing
 
 bashrc = dotfile_path('.bashrc')
 
 def _run():
     alternative.run()
+    arguments.run()
     history.run()
     prompt.run()
     python.run()
