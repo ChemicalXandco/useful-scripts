@@ -9,17 +9,16 @@ def read(func):
     def decorator(self, *args, **kwargs):
         if 'file_contents' in kwargs.keys(): # do not overwrite file_contents if provided
             raise KeyError('do not use file_contents argument; it is provided automatically')
-        kwargs['file_contents'] = self._io.read()
-        self._io.seek(0) # position at start
+        kwargs['file_contents'] = self._read()
         result = func(self, *args, **kwargs)
         return result
     return decorator
 
 
 class ConfigEditor():
-    def __init__(self, cfg_file: str, comment_str: str = '#'):
+    def __init__(self, cfg_file: str, comment_delimiter: str = '#'):
         self._cfg_file = cfg_file
-        self._comment_str = comment_str.strip()
+        self._comment_delimiter = comment_delimiter.strip()
 
     def __enter__(self):
         if not os.path.isfile(self._cfg_file):
@@ -41,7 +40,7 @@ class ConfigEditor():
         print(self._cfg_file, 'successfully edited')
 
     @read
-    def add(self, content: str, under: Optional[str]='', start: Optional[bool]=False, file_contents=''):
+    def add(self, content: str, under: Optional[str]='', start: Optional[bool]=False, replace_matching: str='=', file_contents=''):
         """
         Add a line.
         The line will be added under a heading if under is set.
@@ -54,14 +53,20 @@ class ConfigEditor():
             content: the line(s) to add
             under: the line to add the content under as a regex
             start: add the line to the start of the file if `under` is not found
+            replace_matching: check if a similar statement to the content exists
         """
         if self._is_comment(content_start := file_contents.find(content)):
             self.uncomment(content_start)
-            print('uncommented', content)
+            print(f'Uncommented " {content} "')
             return
         elif content_start != -1:
-            print('line "', content, '" already exists')
             return
+
+        if replace_matching:
+            matching_content = content[:content.find(replace_matching)+1]
+            if matching_content and matching_content in file_contents:
+                self.remove(matching_content)
+                file_contents = self._read()
 
         if start:
             insert_point = 0
@@ -72,14 +77,14 @@ class ConfigEditor():
             if (match := file_contents.find(under)) != -1:
                 insert_point = match + len(under) + 1
             else:
-                print('could not find heading', under)
+                print('Could not find heading', under)
                 heading = under + '\n'
                 self._insert(heading, insert_point)
                 insert_point += len(heading)
-                print('made new heading:', under)
+                print('Made new heading:', under)
 
         self._insert(content+'\n', insert_point)
-        print('added line', content)
+        print(f'Added line " {content} "')
 
     @read
     def replace(self, content: str, with_this: str, file_contents=''):
@@ -93,14 +98,30 @@ class ConfigEditor():
             with_this: the line to add the content under as a regex
         """
         if not content:
-            print('nothing to replace')
+            print('Nothing to replace')
             return
+        if not content in file_contents:
+            print('Could not find the line(s) "', content, '" to replace')
+            return
+        content_start = self.remove(content)
+        self._insert(with_this+'\n', content_start)
+        print('Replaced line(s) "', content, '" with "', with_this, '"')
+
+    @read
+    def remove(self, content: str, file_contents='') -> int:
+        """
+        Remove the line that contains `content`
+        """
         if (content_start := file_contents.find(content)) == -1:
-            print('could not find the line(s) "', content, '" to replace')
-            return
-        self._write(file_contents[:content_start] + file_contents[content_start+len(content):])
-        self._insert(with_this, content_start)
-        print('replaced line(s) "', content, '" with "', with_this, '"')
+            print(f'Could not find " {content} "')
+            return -1
+        if (content_end := file_contents.find('\n', content_start) + 1) == 0:
+            content_end = len(file_contents)
+
+        self._write(file_contents[:content_start] + file_contents[content_end:])
+        print(f'Removed " {content} "')
+
+        return content_start
 
     @read
     def for_each(self, regex: re.Pattern, function: Callable[[int], None], file_contents=''):
@@ -120,23 +141,36 @@ class ConfigEditor():
     @read
     def comment(self, content_start: int, file_contents='') -> int:
         """
-        Comment out all lines matching the regex if they are not already commented out.
+        Comment out the line at `content_start` if it is not already a comment.
+
+        a = 1
+        ^
+        content_start
         """
         if not self._is_comment(content_start):
-            self._insert(self._comment_str + ' ', content_start)
-            return len(self._comment_str) + 1
+            self._insert(self._comment_delimiter + ' ', content_start)
+            return len(self._comment_delimiter) + 1
         return 0
 
     @read
     def uncomment(self, content_start: int, file_contents='') -> int:
         """
-        Uncomment all lines matching the regex if they are commented.
+        Uncomment the line at `content_start` if it is a comment.
+
+        # a = 1
+          ^
+          content_start
         """
         if self._is_comment(content_start):
             comment_start = self._comment_start(content_start)
             self._write(file_contents[:comment_start] + file_contents[content_start:])
-            return len(self._comment_str) * -1
+            return len(self._comment_delimiter) * -1
         return 0
+
+    def _read(self):
+        content = self._io.read()
+        self._io.seek(0) # position at start
+        return content
 
     @read
     def _insert(self, text: str, index: int, file_contents=''):
@@ -151,7 +185,7 @@ class ConfigEditor():
     def _is_comment(self, content_start: int, file_contents='') -> bool:
         start = self._comment_start(content_start)
         substr = file_contents[start:content_start]
-        return substr.strip() == self._comment_str
+        return substr.strip() == self._comment_delimiter
 
     @read
     def _comment_start(self, content_start: int, file_contents='') -> int:

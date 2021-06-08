@@ -126,6 +126,16 @@ b = 2
 
     with heading as cfg_test:
         with ConfigEditor(_cfg_file) as cfg_edit:
+            cfg_edit.add('a = 2')
+            cfg_test._verify_cfg_file("""
+# options
+# b = 2
+a = 2
+"""
+)
+
+    with heading as cfg_test:
+        with ConfigEditor(_cfg_file) as cfg_edit:
             cfg_edit.add('c = 3', under='# options')
             cfg_test._verify_cfg_file("""
 # options
