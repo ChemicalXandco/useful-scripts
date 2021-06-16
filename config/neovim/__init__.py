@@ -1,5 +1,3 @@
-import os
-
 from config.neovim import init
 from utils.env import dotfile_path, is_exe, do_nothing
 

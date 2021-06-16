@@ -29,3 +29,6 @@ def is_exe(name: str) -> bool:
 
 def do_nothing():
     pass
+
+def is_root() -> bool:
+    return os.geteuid() == 0

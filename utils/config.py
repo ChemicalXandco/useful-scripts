@@ -15,8 +15,8 @@ def read(func):
     return decorator
 
 
-class ConfigEditor():
-    def __init__(self, cfg_file: str, comment_delimiter: str = '#'):
+class ConfigEditor:
+    def __init__(self, cfg_file: str, comment_delimiter: str='#'):
         self._cfg_file = cfg_file
         self._comment_delimiter = comment_delimiter.strip()
 
