@@ -27,8 +27,5 @@ def is_exe(name: str) -> bool:
         print(f'Detected {name}')
     return detected
 
-def do_nothing():
-    pass
-
 def is_root() -> bool:
     return os.geteuid() == 0

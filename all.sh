@@ -1,2 +1,1 @@
-python user.py
-sudo python root.py
+sudo python root.py && python user.py

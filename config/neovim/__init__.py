@@ -1,12 +1,7 @@
 from config.neovim import init
-from utils.env import dotfile_path, is_exe, do_nothing
+from utils.env import dotfile_path
 
 root = dotfile_path('.config/nvim')
 
-def _run():
+def run():
     init.run()
-
-if is_exe('nvim'):
-    run = _run
-else:
-    run = do_nothing

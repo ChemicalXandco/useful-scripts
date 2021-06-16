@@ -60,8 +60,6 @@ def test_is_comment():
             assert not cfg_edit._is_comment(regex.search(cfg_test.cfg).start())
             assert cfg_edit._is_comment(re.compile('b = 2').search(cfg_test.cfg).start())
             assert not cfg_edit._is_comment(-1)
-            with pytest.raises(KeyError):
-                cfg_edit._is_comment(2, file_contents='fake file contents')
 
 def test_comment():
     test_cfgs = {
@@ -72,13 +70,18 @@ def test_comment():
     for test, comment_str in test_cfgs.items():
         with test as cfg_test:
             with ConfigEditor(_cfg_file, comment_str) as cfg_edit:
-                cfg_edit.for_each(regex, cfg_edit.comment)
-                cfg_test._verify_cfg_file(comment_str + ' ' + cfg_test.cfg)
+                cfg_edit.comment('a = 1')
+            cfg_test._verify_cfg_file(comment_str + ' ' + cfg_test.cfg)
 
     with heading as cfg_test:
         with ConfigEditor(_cfg_file) as cfg_edit:
-            cfg_edit.for_each(re.compile(r'\w = \d'), cfg_edit.comment)
-            cfg_test._verify_cfg_file("""
+            cfg_edit.comment('b = 2')
+        cfg_test._verify_cfg_file(cfg_test.cfg)
+
+    with heading as cfg_test:
+        with ConfigEditor(_cfg_file) as cfg_edit:
+            cfg_edit.comment('a = 1')
+        cfg_test._verify_cfg_file("""
 # options
 # a = 1
 # b = 2
@@ -96,12 +99,12 @@ def test_uncomment():
         with test as cfg_test:
             with ConfigEditor(_cfg_file, comment_str) as cfg_edit:
                 cfg_edit.for_each(regex, cfg_edit.uncomment)
-                cfg_test._verify_cfg_file(cfg_test.cfg[len(comment_str):])
+            cfg_test._verify_cfg_file(cfg_test.cfg[len(comment_str):])
 
     with heading as cfg_test:
         with ConfigEditor(_cfg_file) as cfg_edit:
             cfg_edit.for_each(re.compile(r'\w = \d'), cfg_edit.uncomment)
-            cfg_test._verify_cfg_file("""
+        cfg_test._verify_cfg_file("""
 # options
 a = 1
 b = 2
@@ -112,12 +115,12 @@ def test_add():
     with heading as cfg_test:
         with ConfigEditor(_cfg_file) as cfg_edit:
             cfg_edit.add('a = 1')
-            cfg_test._verify_cfg_file(heading.cfg)
+        cfg_test._verify_cfg_file(heading.cfg)
 
     with heading as cfg_test:
         with ConfigEditor(_cfg_file) as cfg_edit:
             cfg_edit.add('b = 2')
-            cfg_test._verify_cfg_file("""
+        cfg_test._verify_cfg_file("""
 # options
 a = 1
 b = 2
@@ -127,7 +130,7 @@ b = 2
     with heading as cfg_test:
         with ConfigEditor(_cfg_file) as cfg_edit:
             cfg_edit.add('a = 2')
-            cfg_test._verify_cfg_file("""
+        cfg_test._verify_cfg_file("""
 # options
 # b = 2
 a = 2
@@ -137,7 +140,7 @@ a = 2
     with heading as cfg_test:
         with ConfigEditor(_cfg_file) as cfg_edit:
             cfg_edit.add('c = 3', under='# options')
-            cfg_test._verify_cfg_file("""
+        cfg_test._verify_cfg_file("""
 # options
 c = 3
 a = 1
@@ -148,7 +151,7 @@ a = 1
     with heading as cfg_test:
         with ConfigEditor(_cfg_file) as cfg_edit:
             cfg_edit.add('c = 3', under='# nonexistent options')
-            cfg_test._verify_cfg_file("""
+        cfg_test._verify_cfg_file("""
 # options
 a = 1
 # b = 2
@@ -160,7 +163,7 @@ c = 3
     with heading as cfg_test:
         with ConfigEditor(_cfg_file) as cfg_edit:
             cfg_edit.add('c = 3', under='# nonexistent options', start=True)
-            cfg_test._verify_cfg_file("""# nonexistent options
+        cfg_test._verify_cfg_file("""# nonexistent options
 c = 3
 
 # options
@@ -173,7 +176,7 @@ def test_replace():
     with heading as cfg_test:
         with ConfigEditor(_cfg_file) as cfg_edit:
             cfg_edit.replace('a = 1', 'a = 2')
-            cfg_test._verify_cfg_file("""
+        cfg_test._verify_cfg_file("""
 # options
 a = 2
 # b = 2
@@ -183,9 +186,14 @@ a = 2
     with heading as cfg_test:
         with ConfigEditor(_cfg_file) as cfg_edit:
             cfg_edit.replace('a = 2', 'a = 3')
-            cfg_test._verify_cfg_file(heading.cfg)
+        cfg_test._verify_cfg_file(heading.cfg)
 
     with heading as cfg_test:
         with ConfigEditor(_cfg_file) as cfg_edit:
             cfg_edit.replace('', 'a = 2')
-            cfg_test._verify_cfg_file(heading.cfg)
+        cfg_test._verify_cfg_file(heading.cfg)
+
+    with heading as cfg_test:
+        with ConfigEditor(_cfg_file) as cfg_edit:
+            with pytest.raises(KeyError):
+                cfg_edit.replace('a = 1', 'a = 2', index=0)
