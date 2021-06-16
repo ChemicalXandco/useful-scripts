@@ -1,5 +1,20 @@
+import os
 import pathlib
 import shutil
+
+def rm(path: str) -> bool:
+    """
+    Remove the file at `path`
+
+    Args:
+        path: path of the file to remove
+    Returns:
+        bool: if the file existed
+    """
+    if (exists := os.path.isfile(path)):
+        os.remove(path)
+        print(f'Removed {path}')
+    return exists
 
 def dotfile_path(fname: str) -> str:
     """Get the full path of a dotfile in the ~/ directory."""
