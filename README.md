@@ -9,7 +9,9 @@ Installed programs are automatically detected and configured by running `all.sh`
 Any type of config file can be modified with easy to use API.
 An advantage of managing the configs this way is that only the modifications are stored and can be applied to any file no matter what it already contains.
 
-## Supported programs
+# Compatibility
+
+## Supported program configs
 
 bash, firefox, neovim, python
 

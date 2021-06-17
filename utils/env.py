@@ -1,6 +1,11 @@
 import os
 import pathlib
 import shutil
+import subprocess
+
+def run(*args: list[str]) -> str:
+    res = subprocess.check_output(args)
+    return res.decode('utf-8')
 
 def rm(path: str) -> bool:
     """

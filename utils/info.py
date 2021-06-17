@@ -1,7 +1,8 @@
 import itertools
 import functools
 import re
-import subprocess
+
+from utils.env import run
 
 
 @functools.total_ordering
@@ -34,7 +35,6 @@ class Version:
 
 
 def get_version(command: str, arguments: list[str]=['--version']) -> Version:
-    res = subprocess.check_output([command]+arguments)
-    output = res.decode('utf-8')
+    output = run(command, *arguments)
     match = re.search(r'(?:\d+(\D))+\d+', output)
     return Version(delimiter=match.group(1)).init_str(match.group(0))
