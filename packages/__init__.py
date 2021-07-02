@@ -6,6 +6,7 @@ pkg_list = PackageList(
     Package('fd', apt='fd-find'),
     Package('ripgrep'),
     Package('starship', apt=''),
+    Package('noto-fonts-emoji', apt='fonts-noto-color-emoji'),
 )
 
 def run():
