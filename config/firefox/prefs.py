@@ -40,6 +40,12 @@ def run():
 
         # disable unneeded services
         cfg_edit.add('user_pref("extensions.pocket.enabled", false);')
+        cfg_edit.add('user_pref("services.sync.engine.history", false);')
+        cfg_edit.add('user_pref("services.sync.prefs.sync.browser.urlbar.suggest.history", false);')
+
+        # disable history
+        cfg_edit.add('user_pref("places.history.enabled", false);')
+        cfg_edit.add('user_pref("privacy.history.custom", true);')
 
 if __name__ == '__main__':
     run()
