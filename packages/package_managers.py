@@ -4,9 +4,29 @@ from subprocess import CalledProcessError
 from utils.env import is_exe, run
 
 
+class PackageList:
+    def __init__(self, *packages):
+        self._packages = packages
+
+    def propose(self):
+        previous_response = None
+        packages_to_install = []
+        for i in self._packages:
+            previous_response = i.propose(previous_response)
+            if i.to_install:
+                packages_to_install.append(i.name)
+            if i.to_install or package_manager.is_installed(i.name):
+                packages_to_install += i.depends.propose()
+        return packages_to_install
+
+    def add(self, *packages):
+        self._packages += packages
+
+
 class Package:
     def __init__(self, name, **kwargs):
         self.name = kwargs.get(package_manager.name, name)
+        self.depends = PackageList()
 
     @property
     def installed(self):
@@ -47,23 +67,9 @@ class Package:
 
         return None
 
-
-class PackageList:
-    def __init__(self, *packages):
-        self._packages = packages
-
-    def install(self):
-        previous_response = None
-        packages_to_install = []
-        for i in self._packages:
-            previous_response = i.propose(previous_response)
-            if i.to_install:
-                packages_to_install.append(i.name)
-
-        if packages_to_install:
-            print(f'Installing the following packages: {",".join(packages_to_install)}')
-            package_manager.install(packages_to_install)
-            print('Packages installed successfully')
+    def depend(self, *args):
+        self.depends.add(*args)
+        return self
 
 
 class PackageManager(ABC):
