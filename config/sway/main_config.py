@@ -22,10 +22,10 @@ def run():
                 under='# Start a terminal',
                 )
 
-        under = '# Your preferred application launcher\n' +\
-                '# Note: pass the final command to swaymsg so that the resulti\
-                ng window can be opened\n' +\
-                '# on the original workspace that the command was run on.'
+        under = ('# Your preferred application launcher\n'
+                 '# Note: pass the final command to swaymsg so that the result'
+                 'ing window can be opened\n'
+                 '# on the original workspace that the command was run on.')
         var = '$menu'
         if is_exe('wofi'):
             cfg_edit.add(f'set {var} wofi --show run', under=under, start=True)
