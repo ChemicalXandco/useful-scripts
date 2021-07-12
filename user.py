@@ -15,3 +15,6 @@ if is_exe('nvim'):
 if is_exe('python') or is_exe('python3'):
     from config import python
     python.run()
+if is_exe('sway'):
+    from config import sway
+    sway.run()
