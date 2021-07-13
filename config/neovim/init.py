@@ -4,11 +4,16 @@ from config import neovim
 from utils.config import ConfigEditor
 from utils.env import is_exe
 
+
 def _enable_lsp(cfg_edit, server, exe=None):
     if not exe:
         exe = server
     if is_exe(exe):
-        cfg_edit.add("lua << EOF\nrequire'lspconfig'."+server+'.setup{}\nEOF', under='" enable lsp')
+        cfg_edit.add(
+                "lua << EOF\nrequire'lspconfig'."+server+'.setup{}\nEOF',
+                under='" enable lsp',
+                )
+
 
 def run():
     with ConfigEditor(os.path.join(neovim.root, 'init.vim'), '" ') as cfg_edit:
@@ -23,9 +28,12 @@ def run():
         cfg_edit.add('set smartindent', under='" try to be smart (increase the indenting level after ‘{’, decrease it after ‘}’, and so on):')
         cfg_edit.add('filetype plugin indent on', under='" use language‐specific plugins for indenting (better):')
 
+        cfg_edit.add('set noswapfile', under='" reduce disk writes')
+
         # enable language servers
         _enable_lsp(cfg_edit, 'pyls')
         _enable_lsp(cfg_edit, 'rust_analyzer', 'rust-analyzer')
+
 
 if __name__ == '__main__':
     run()
