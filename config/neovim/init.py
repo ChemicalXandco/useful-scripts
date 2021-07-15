@@ -3,6 +3,7 @@ import os
 from config import neovim
 from utils.config import ConfigEditor
 from utils.env import is_exe
+from utils.info import get_version, Version
 
 
 def _enable_lsp(cfg_edit, server, exe=None):
@@ -30,9 +31,10 @@ def run():
 
         cfg_edit.add('set noswapfile', under='" reduce disk writes')
 
-        # enable language servers
-        _enable_lsp(cfg_edit, 'pyls')
-        _enable_lsp(cfg_edit, 'rust_analyzer', 'rust-analyzer')
+        if get_version('nvim') >= Version(0, 5, 0):
+            # enable language servers
+            _enable_lsp(cfg_edit, 'pyls')
+            _enable_lsp(cfg_edit, 'rust_analyzer', 'rust-analyzer')
 
 
 if __name__ == '__main__':
