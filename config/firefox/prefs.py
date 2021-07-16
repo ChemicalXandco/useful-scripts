@@ -3,6 +3,7 @@ import os
 from config import firefox
 from utils.config import ConfigEditor
 
+
 def run():
     with ConfigEditor(os.path.join(firefox.default, 'prefs.js'), '//') as cfg_edit:
         cfg_edit.add('user_pref("browser.aboutConfig.showWarning", false);')
@@ -46,6 +47,10 @@ def run():
         # disable history
         cfg_edit.add('user_pref("places.history.enabled", false);')
         cfg_edit.add('user_pref("privacy.history.custom", true);')
+
+        # urlbar
+        cfg_edit.add('user_pref("browser.urlbar.maxRichResults", 1);')
+
 
 if __name__ == '__main__':
     run()
