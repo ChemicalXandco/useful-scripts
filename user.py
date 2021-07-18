@@ -3,6 +3,9 @@ from utils.env import is_exe, is_root
 if is_root():
     raise RuntimeError('Do not run as root')
 
+if is_exe('alacritty'):
+    from config import alacritty
+    alacritty.run()
 if is_exe('bash'):
     from config import bash
     bash.run()

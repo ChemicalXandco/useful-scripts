@@ -3,9 +3,11 @@ import pathlib
 import shutil
 import subprocess
 
+
 def run(*args: list[str]) -> str:
     res = subprocess.check_output(args)
     return res.decode('utf-8')
+
 
 def rm(path: str) -> bool:
     """
@@ -21,9 +23,11 @@ def rm(path: str) -> bool:
         print(f'Removed {path}')
     return exists
 
+
 def dotfile_path(fname: str) -> str:
     """Get the full path of a dotfile in the ~/ directory."""
     return str(pathlib.Path(f'~/{fname}').expanduser())
+
 
 def is_exe(name: str) -> bool:
     """Check whether `name` is on PATH and marked as executable."""
@@ -32,5 +36,18 @@ def is_exe(name: str) -> bool:
         print(f'Detected {name}')
     return detected
 
+
 def is_root() -> bool:
     return os.geteuid() == 0
+
+
+def select_font(*fonts: list[str], default: str) -> str:
+    """
+    Select a font from fonts passed as arguements.
+    Select first available font with fallback to `default`.
+    """
+    available_fonts = run('fc-list')
+    for font in fonts:
+        if font in available_fonts:
+            return font
+    return default

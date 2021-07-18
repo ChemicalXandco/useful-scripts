@@ -2,12 +2,14 @@ import os
 import re
 from typing import Callable
 
+
 def get_index(func):
     """
     Get the index of the text.
     """
+
     def decorator(self, text: str, *args, **kwargs):
-        if 'index' in kwargs.keys(): # do not overwrite file_contents if provided
+        if 'index' in kwargs.keys():  # do not overwrite file_contents if provided
             raise KeyError('do not use the index argument; it is provided automatically')
         if not isinstance(text, str):
             raise TypeError(f'Text must be str, got {type(text)}: {text} instead')
@@ -17,7 +19,7 @@ def get_index(func):
 
 
 class ConfigEditor:
-    def __init__(self, cfg_file: str, comment_delimiter: str='#'):
+    def __init__(self, cfg_file: str, comment_delimiter: str = '#'):
         self._cfg_file = cfg_file
         self._comment_delimiter = comment_delimiter.strip()
 
@@ -47,7 +49,9 @@ class ConfigEditor:
                 print('Successfully edited', self._cfg_file)
 
     @get_index
-    def add(self, text: str, under: str='', start: bool=False, replace_matching: str='=', index: int=-1):
+    def add(self, text: str, under: str = '', start: bool = False,
+            replace_matching: str = '=', allow_duplicates: bool = False,
+            index: int = -1):
         """
         Add a line.
         The line will be added under a heading if under is set.
@@ -61,14 +65,18 @@ class ConfigEditor:
             under: the line to add the content under as a regex
             start: add the line to the start of the file if `under` is not found
             replace_matching: check if a similar statement to the content exists
+            allow_duplicates: if `text` is detected but is not under `under`, \
+                    create a new line under `under`
         """
         if self._is_comment(index):
             self.uncomment(text)
             return
         elif index != -1:
-            return
+            if not (allow_duplicates and not (text in self._io[self._io.find(under):])):
+                # line already exists
+                return
 
-        if replace_matching:
+        if replace_matching and not allow_duplicates:
             matching_content = text[:text.find(replace_matching)+1]
             if matching_content and matching_content in self._io:
                 self.remove(matching_content)
