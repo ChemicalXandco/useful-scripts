@@ -125,8 +125,10 @@ class ConfigEditor:
         """
         Remove the line(s) that contain(s) `text`
         """
+        if not text:
+            return
         if index == -1:
-            print(f'Could not find " {text} "')
+            return
         if (content_end := self._io.find('\n', index) + 1) == 0:
             content_end = len(self._io)
 

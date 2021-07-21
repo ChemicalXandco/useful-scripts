@@ -197,3 +197,28 @@ a = 2
         with ConfigEditor(_cfg_file) as cfg_edit:
             with pytest.raises(KeyError):
                 cfg_edit.replace('a = 1', 'a = 2', index=0)
+
+def test_remove():
+    with heading as cfg_test:
+        with ConfigEditor(_cfg_file) as cfg_edit:
+            cfg_edit.remove('a = 1')
+        cfg_test._verify_cfg_file("""
+# options
+# b = 2
+"""
+)
+
+    with heading as cfg_test:
+        with ConfigEditor(_cfg_file) as cfg_edit:
+            cfg_edit.remove('a = 2')
+        cfg_test._verify_cfg_file(heading.cfg)
+
+    with heading as cfg_test:
+        with ConfigEditor(_cfg_file) as cfg_edit:
+            cfg_edit.remove('')
+        cfg_test._verify_cfg_file(heading.cfg)
+
+    with heading as cfg_test:
+        with ConfigEditor(_cfg_file) as cfg_edit:
+            with pytest.raises(KeyError):
+                cfg_edit.remove('a = 1', index=0)

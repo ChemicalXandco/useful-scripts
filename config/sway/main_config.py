@@ -35,6 +35,7 @@ def run():
                 )
 
         under = 'bar {'
+        cfg_edit.remove('    position top')
         cfg_edit.add('    position bottom', under=under)
 
         cfg_edit.add('default_border none')
