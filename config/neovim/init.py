@@ -33,7 +33,7 @@ def run():
 
         if get_version('nvim') >= Version(0, 5, 0):
             # enable language servers
-            _enable_lsp(cfg_edit, 'pyls')
+            _enable_lsp(cfg_edit, 'pylsp')
             _enable_lsp(cfg_edit, 'rust_analyzer', 'rust-analyzer')
 
 

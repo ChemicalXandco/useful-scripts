@@ -8,7 +8,7 @@ pkg_list = PackageList(
     Package('starship', apt=''),
     Package('noto-fonts-emoji', apt='fonts-noto-color-emoji'),
     Package('python', apt='python3').depend(
-        Package('python-language-server', apt='python3-pyls').depend(
+        Package('', apt='').depend(  # pylsp not available in repos
             Package('autopep8', apt='python3-autopep8'),
             Package('flake8'),
             Package('python-mccabe', apt='python3-mccabe'),
@@ -22,6 +22,7 @@ pkg_list = PackageList(
         Package('rust-analyzer', apt=''),
     ),
 )
+
 
 def run():
     packages_to_install = pkg_list.propose()

@@ -15,7 +15,7 @@ class PackageList:
             previous_response = i.propose(previous_response)
             if i.to_install:
                 packages_to_install.append(i.name)
-            if i.to_install or package_manager.is_installed(i.name):
+            if i.to_install or (i.installed and i.name):
                 packages_to_install += i.depends.propose()
         return packages_to_install
 
@@ -31,7 +31,7 @@ class Package:
     @property
     def installed(self):
         if not self.name:
-            return True # fake being installed so that this package is ignored
+            return True  # fake being installed so that this package is ignored
         else:
             return package_manager.is_installed(self.name)
 
