@@ -73,6 +73,7 @@ end
 
         servers = []
         server_test = {
+                'ccls': 'ccls',
                 'pylsp': 'pylsp',
                 'rust-analyzer': 'rust_analyzer'
                 }
