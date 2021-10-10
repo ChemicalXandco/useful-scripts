@@ -6,6 +6,9 @@ if not is_root():
 import packages
 packages.run()
 
+if is_exe('makepkg'):
+    from config import makepkg
+    makepkg.run()
 if is_exe('pacman'):
     from config import pacman
     pacman.run()
