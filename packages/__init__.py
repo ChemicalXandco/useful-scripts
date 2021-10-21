@@ -2,13 +2,14 @@ from packages.package_managers import Package, PackageList, package_manager
 
 pkg_list = PackageList(
     Package('bat'),
+    Package('bottom', apt=''),
     Package('exa'),
     Package('fd', apt='fd-find'),
     Package('ripgrep'),
     Package('starship', apt=''),
     Package('noto-fonts-emoji', apt='fonts-noto-color-emoji'),
     Package('python', apt='python3').depend(
-        Package('', apt='').depend(  # pylsp not available in repos
+        Package('python-lsp-server', apt='').depend(
             Package('autopep8', apt='python3-autopep8'),
             Package('flake8'),
             Package('python-mccabe', apt='python3-mccabe'),
