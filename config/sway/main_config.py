@@ -1,4 +1,5 @@
 import os
+import shutil
 
 from config import sway
 from utils.config import ConfigEditor
@@ -10,7 +11,11 @@ def exec_cmd(bind, cmd):
 
 
 def run():
-    with ConfigEditor(os.path.join(sway.root, 'config'), '#') as cfg_edit:
+    config_path = os.path.join(sway.root, 'config')
+    if not os.path.isfile(config_path):
+        shutil.copy('/etc/sway/config', config_path)
+
+    with ConfigEditor(config_path, '#') as cfg_edit:
         under = '# Your preferred terminal emulator'
         var = '$term'
         if is_exe('alacritty'):
