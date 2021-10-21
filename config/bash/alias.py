@@ -6,7 +6,7 @@ from utils.env import is_exe
 def run():
     with ConfigEditor(bash.bashrc) as cfg_edit:
         under = '# power'
-        cfg_edit.add('sudo shutdown now', under=under)
+        cfg_edit.add("alias s='sudo shutdown now'", under=under)
 
         under = '# fetch updates'
         cmds = []
