@@ -12,6 +12,9 @@ if is_exe('bash'):
 if is_exe('firefox'):
     from config import firefox
     firefox.run()
+if is_exe('mako'):
+    from config import mako
+    mako.run()
 if is_exe('nvim'):
     from config import neovim
     neovim.run()
