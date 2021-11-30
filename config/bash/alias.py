@@ -26,8 +26,7 @@ def run():
         under = '# launch desktop'
         if is_exe('sway'):
             cfg_edit.add(
-                ("alias l='systemctl --user import-environment && "
-                    "exec systemctl --wait --user start sway.service'"),
+                "exec systemctl --wait --user start sway.service",
                 under=under,
                 )
 
