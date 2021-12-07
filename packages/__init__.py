@@ -1,6 +1,7 @@
+from utils.env import is_exe
 from packages.package_managers import Package, PackageList, package_manager
 
-pkg_list = PackageList(
+base = PackageList(
     Package('bat'),
     Package('bottom', apt=''),
     Package('exa'),
@@ -24,11 +25,22 @@ pkg_list = PackageList(
     ),
 )
 
+sway = PackageList(
+    Package('wofi'),
+    Package('mako', apt='mako-notifier'),
+    Package('grim'),
+    Package('slurp'),
+    Package('wl-clipboard'),
+)
+
 
 def run():
-    packages_to_install = pkg_list.propose()
+    install = base.propose()
 
-    if packages_to_install:
-        print(f'Installing the following packages: {",".join(packages_to_install)}')
-        package_manager.install(packages_to_install)
+    if is_exe('sway'):
+        install += sway.propose()
+
+    if install:
+        print(f'Installing the following packages: {",".join(install)}')
+        package_manager.install(install)
         print('Packages installed successfully')

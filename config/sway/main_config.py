@@ -43,6 +43,12 @@ def run():
         cfg_edit.remove('    position top')
         cfg_edit.add('    position bottom', under=under)
 
+        if is_exe('grim') and is_exe('slurp') and is_exe('wl-copy'):
+            cfg_edit.add(
+                    exec_cmd('$mod+Shift+s', 'grim -g "$(slurp)" - | wl-copy'),
+                    under='# take a screenshot and copy to clipboard'
+                    )
+
         cfg_edit.add('default_border none')
         cfg_edit.add('include /etc/sway/config.d/*')
 
