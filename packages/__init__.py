@@ -8,8 +8,8 @@ base = PackageList(
     Package('fd', apt='fd-find'),
     Package('ripgrep'),
     Package('starship', apt=''),
-    Package('noto-fonts-emoji', apt='fonts-noto-color-emoji'),
-    Package('python', apt='python3').depend(
+    Package('noto-fonts-emoji', apt='fonts-noto-color-emoji', brew=''),
+    Package('python', apt='python3', brew='').depend(
         Package('python-lsp-server', apt='').depend(
             Package('autopep8', apt='python3-autopep8'),
             Package('flake8'),
@@ -20,7 +20,7 @@ base = PackageList(
             Package('python-rope', apt='python3-rope'),
         ),
     ),
-    Package('cargo').depend(
+    Package('cargo', brew='rust').depend(
         Package('rust-analyzer', apt=''),
     ),
 )

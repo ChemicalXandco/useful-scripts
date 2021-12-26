@@ -39,7 +39,7 @@ class Package:
         if self.installed:
             self.to_install = False
             return previous_response
-        if previous_response != None:
+        if previous_response is not None:
             self.to_install = previous_response
             return previous_response
 
@@ -85,6 +85,10 @@ class PackageManager(ABC):
         pass
 
 
+class Alpine(PackageManager):
+    name = 'apk'
+
+
 class Arch(PackageManager):
     name = 'pacman'
 
@@ -97,6 +101,17 @@ class Arch(PackageManager):
             return True
         except CalledProcessError:
             return False
+
+
+class Brew(PackageManager):
+    name = 'brew'
+
+    def install(self, packages: list[str]):
+        for package in packages:
+            run(self.name, 'install', package)
+
+    def is_installed(self, package: str) -> bool:
+        return len(run(self.name, 'ls', '--versions', package)) > 0
 
 
 class Debian(PackageManager):
@@ -113,14 +128,6 @@ class Debian(PackageManager):
             return False
 
 
-class RH(PackageManager):
-    name = 'dnf'
-
-
-class NixOS(PackageManager):
-    name = 'nix-env'
-
-
 class Gentoo(PackageManager):
     name = 'emerge'
 
@@ -128,21 +135,27 @@ class Gentoo(PackageManager):
         run('sudo', self.name, *packages)
 
 
-class Alpine(PackageManager):
-    name = 'apk'
+class NixOS(PackageManager):
+    name = 'nix-env'
 
 
 class OpenSUSE(PackageManager):
     name = 'zypper'
 
+
+class RH(PackageManager):
+    name = 'dnf'
+
+
 available_package_managers = (
-    Arch,
-    Debian,
-    RH,
-    NixOS,
-    Gentoo,
     Alpine,
+    Arch,
+    Brew,
+    Debian,
+    Gentoo,
+    NixOS,
     OpenSUSE,
+    RH,
 )
 
 for i in available_package_managers:
@@ -151,4 +164,5 @@ for i in available_package_managers:
         break
 
 if not package_manager:
-    raise RuntimeError('Unknown package manager')
+    raise RuntimeError('could not find a package manager')
+print(f'found package manager {package_manager}')
