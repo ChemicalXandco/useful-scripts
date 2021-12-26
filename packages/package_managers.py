@@ -114,7 +114,10 @@ class Brew(PackageManager):
             run(self.name, 'install', package)
 
     def is_installed(self, package: str) -> bool:
-        return len(run(self.name, 'ls', '--versions', package)) > 0
+        try:
+            return len(run(self.name, 'ls', '--versions', package)) > 0
+        except CalledProcessError:
+            return False
 
 
 class Debian(PackageManager):
