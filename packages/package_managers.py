@@ -87,10 +87,12 @@ class PackageManager(ABC):
 
 class Alpine(PackageManager):
     name = 'apk'
+    root = True
 
 
 class Arch(PackageManager):
     name = 'pacman'
+    root = True
 
     def install(self, packages: list[str]):
         run('sudo', self.name, '-Sy', '--noconfirm', *packages)
@@ -105,6 +107,7 @@ class Arch(PackageManager):
 
 class Brew(PackageManager):
     name = 'brew'
+    root = False
 
     def install(self, packages: list[str]):
         for package in packages:
@@ -116,6 +119,7 @@ class Brew(PackageManager):
 
 class Debian(PackageManager):
     name = 'apt'
+    root = True
 
     def install(self, packages: list[str]):
         run('sudo', self.name, 'install', '-y', *packages)
@@ -130,6 +134,7 @@ class Debian(PackageManager):
 
 class Gentoo(PackageManager):
     name = 'emerge'
+    root = True
 
     def install(self, packages: list[str]):
         run('sudo', self.name, *packages)
@@ -137,14 +142,17 @@ class Gentoo(PackageManager):
 
 class NixOS(PackageManager):
     name = 'nix-env'
+    root = True
 
 
 class OpenSUSE(PackageManager):
     name = 'zypper'
+    root = True
 
 
 class RH(PackageManager):
     name = 'dnf'
+    root = True
 
 
 available_package_managers = (

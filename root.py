@@ -4,7 +4,8 @@ if not is_root():
     raise RuntimeError('Need to run as root')
 
 import packages
-packages.run()
+if packages.package_manager.root:
+    packages.run()
 
 if is_exe('makepkg'):
     from config import makepkg

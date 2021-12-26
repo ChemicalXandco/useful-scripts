@@ -3,6 +3,10 @@ from utils.env import is_exe, is_root
 if is_root():
     raise RuntimeError('Do not run as root')
 
+import packages
+if not packages.package_manager.root:
+    packages.run()
+
 if is_exe('alacritty'):
     from config import alacritty
     alacritty.run()
