@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 from subprocess import CalledProcessError
 
 from utils.env import is_exe, run
+from utils.ui import yesno
 
 
 class PackageList:
@@ -43,29 +44,9 @@ class Package:
             self.to_install = previous_response
             return previous_response
 
-        valid_response = False
-        while not valid_response:
-            response = input(f'Install {self.name}? (y/ya/n/na)')
-
-            if response[0] == 'y':
-                self.to_install = True
-                valid_response = True
-            elif response[0] == 'n':
-                self.to_install = False
-                valid_response = True
-            else:
-                print(f'Invalid input "{response}"')
-
-            if len(response) > 2:
-                print(f'Input "{response}" invalid: too many characters')
-                valid_response = False
-            elif len(response) == 2 and response[1] == 'a':
-                return self.to_install
-            elif len(response) == 2:
-                print(f'Input "{response}" invalid: {response[1]} is not a valid character')
-                valid_response = False
-
-        return None
+        response = yesno(f'Install {self.name}?')
+        self.to_install = response.result
+        return self.to_install if response.all else None
 
     def depend(self, *args):
         self.depends.add(*args)

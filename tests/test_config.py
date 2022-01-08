@@ -32,7 +32,6 @@ class TestConfig:
             f.seek(0)
 
 
-
 heading = TestConfig(
 """
 # options
@@ -42,6 +41,7 @@ a = 1
 )
 
 regex = re.compile('a = 1')
+
 
 def test_is_comment():
     test_cfgs = {
@@ -60,6 +60,7 @@ def test_is_comment():
             assert not cfg_edit._is_comment(regex.search(cfg_test.cfg).start())
             assert cfg_edit._is_comment(re.compile('b = 2').search(cfg_test.cfg).start())
             assert not cfg_edit._is_comment(-1)
+
 
 def test_comment():
     test_cfgs = {
@@ -88,6 +89,7 @@ def test_comment():
 """
 )
 
+
 def test_uncomment():
     test_cfgs = {
         TestConfig('# a = 1'): '# ',
@@ -110,6 +112,7 @@ a = 1
 b = 2
 """
 )
+
 
 def test_add():
     with heading as cfg_test:
@@ -172,6 +175,24 @@ a = 1
 """
 )
 
+
+def test_exists():
+    with heading as _:
+        with ConfigEditor(_cfg_file) as cfg_edit:
+            assert cfg_edit.exists('a = 1')
+            assert not cfg_edit.exists('b = 2')
+            assert not cfg_edit.exists('c = 3')
+
+            assert cfg_edit.exists('a = 1', True)
+            assert cfg_edit.exists('b = 2', True)
+            assert not cfg_edit.exists('c = 3', True)
+
+    with heading as _:
+        with ConfigEditor(_cfg_file) as cfg_edit:
+            with pytest.raises(KeyError):
+                cfg_edit.exists('a = 1', index=0)
+
+
 def test_replace():
     with heading as cfg_test:
         with ConfigEditor(_cfg_file) as cfg_edit:
@@ -197,6 +218,7 @@ a = 2
         with ConfigEditor(_cfg_file) as cfg_edit:
             with pytest.raises(KeyError):
                 cfg_edit.replace('a = 1', 'a = 2', index=0)
+
 
 def test_remove():
     with heading as cfg_test:

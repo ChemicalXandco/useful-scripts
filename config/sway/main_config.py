@@ -4,13 +4,25 @@ import shutil
 from config import sway
 from utils.config import ConfigEditor
 from utils.env import is_exe
+from utils.ui import get_bg, select, yesno
+
+default_wallpapers = [
+    '/usr/share/backgrounds/sway/Sway_Wallpaper_Blue_768x1024.png',
+    '/usr/share/backgrounds/sway/Sway_Wallpaper_Blue_768x1024_Portrait.png',
+    '/usr/share/backgrounds/sway/Sway_Wallpaper_Blue_1136x640.png',
+    '/usr/share/backgrounds/sway/Sway_Wallpaper_Blue_1136x640_Portrait.png',
+    '/usr/share/backgrounds/sway/Sway_Wallpaper_Blue_1366x768.png',
+    '/usr/share/backgrounds/sway/Sway_Wallpaper_Blue_1920x1080.png',
+    '/usr/share/backgrounds/sway/Sway_Wallpaper_Blue_2048x1536.png',
+    '/usr/share/backgrounds/sway/Sway_Wallpaper_Blue_2048x1536_Portrait.png',
+]
 
 
 def exec_cmd(bind, cmd):
     return f'bindsym {bind} exec {cmd}'
 
 
-def run():
+def run(force_bg: bool = False):
     config_path = os.path.join(sway.root, 'config')
     if not os.path.isfile(config_path):
         shutil.copy('/etc/sway/config', config_path)
@@ -39,6 +51,25 @@ def run():
                 under='# Start your launcher',
                 )
 
+        default_bg = ('output * bg /usr/share/backgrounds/sway/Sway_Wallpaper_'
+                      'Blue_1920x1080.png fill')
+        if cfg_edit.exists(default_bg) or force_bg:
+            if yesno('change the background?').result:
+                new_bg = get_bg(default_wallpapers)
+                mode = select(
+                        'stretch',
+                        'fill',
+                        'fit',
+                        'center',
+                        'tile',
+                        default='fill')
+                cfg_edit.add(
+                    f'output * bg {new_bg} {mode}',
+                    under=('# Default wallpaper (more resolutions are availabl'
+                           'e in /usr/share/backgrounds/sway/)'),
+                    replace_matching='bg'
+                )
+
         under = 'bar {'
         cfg_edit.remove('    position top')
         cfg_edit.add('    position bottom', under=under)
@@ -54,4 +85,4 @@ def run():
 
 
 if __name__ == '__main__':
-    run()
+    run(force_bg=True)

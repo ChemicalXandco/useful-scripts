@@ -100,6 +100,13 @@ class ConfigEditor:
         print(f'Added line " {text} "')
 
     @get_index
+    def exists(self, text: str, include_comments: bool = False, index: int = -1) -> bool:
+        """
+        Tests if `text` exists in the file.
+        """
+        return index != -1 and ((not self._is_comment(index)) or include_comments)
+
+    @get_index
     def replace(self, text: str, with_this: str, index: int):
         """
         Replace a line.
@@ -132,8 +139,8 @@ class ConfigEditor:
         if (content_end := self._io.find('\n', index) + 1) == 0:
             content_end = len(self._io)
 
+        print(f'Removed " {self._io[index:content_end]} "')
         self._cut(index, content_end)
-        print(f'Removed " {text} "')
 
     def for_each(self, regex: re.Pattern, function: Callable[[str], None]):
         """
