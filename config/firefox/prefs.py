@@ -23,11 +23,6 @@ def run():
         cfg_edit.add('user_pref("browser.cache.disk.smart_size.enabled", false);')
         cfg_edit.add('user_pref("browser.cache.disk_cache_ssl", false);')
 
-        # enable memory cache
-        cfg_edit.add('user_pref("browser.cache.memory.capacity", -1);')
-        cfg_edit.add('user_pref("browser.cache.memory.enable", true);')
-        cfg_edit.add('user_pref("browser.cache.memory.max_entry_size", 5120);')
-
         # disable offline cache
         cfg_edit.add('user_pref("browser.cache.offline.capacity", 0);')
         cfg_edit.add('user_pref("browser.cache.offline.enable", false);')
@@ -41,7 +36,6 @@ def run():
 
         # disable unneeded services
         cfg_edit.add('user_pref("extensions.pocket.enabled", false);')
-        cfg_edit.add('user_pref("services.sync.engine.history", false);')
         cfg_edit.add('user_pref("services.sync.prefs.sync.browser.urlbar.suggest.history", false);')
 
         # disable history
