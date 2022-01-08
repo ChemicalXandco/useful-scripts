@@ -1,5 +1,6 @@
 import os
 import pathlib
+import platform
 import shutil
 import subprocess
 
@@ -32,6 +33,12 @@ def dotfile_path(fname: str) -> str:
 def is_exe(name: str) -> bool:
     """Check whether `name` is on PATH and marked as executable."""
     detected = shutil.which(name) is not None
+    if not detected and platform.system() == 'Darwin':
+        try:
+            run('open', '-n', '-a', name, '--args', '--version')
+            detected = True
+        except subprocess.CalledProcessError:
+            pass
     if detected:
         print(f'Detected {name}')
     return detected
