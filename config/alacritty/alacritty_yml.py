@@ -40,6 +40,8 @@ def run():
         cfg_edit.add('    style: Bold Italic', under=h1)
         cfg_edit.add(f'    family: {font}', under=h1, allow_duplicates=True)
 
+        cfg_edit.add('background_opacity: 0.75')
+
 
 if __name__ == '__main__':
     run()
