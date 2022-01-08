@@ -1,11 +1,14 @@
 import configparser
 import os
+import platform
 
 from config.firefox import prefs
 from utils.env import dotfile_path
 
 try:
     root = dotfile_path('.mozilla/firefox')
+    if platform.system() == 'Darwin':
+        root = dotfile_path('Library/Application Support/Firefox')
 
     installs = os.path.join(root, 'installs.ini')
     _installs_cfg = configparser.ConfigParser()
