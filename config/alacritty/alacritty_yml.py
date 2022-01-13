@@ -42,6 +42,10 @@ def run():
 
         cfg_edit.add('background_opacity: 0.75')
 
+        h0 = 'key_bindings:'
+        # spawn new instance in same directory
+        cfg_edit.add('  - { key: Return,   mods: Control|Shift, action: SpawnNewInstance }', under=h0)
+
 
 if __name__ == '__main__':
     run()
