@@ -1,7 +1,7 @@
 import os
 import shutil
 
-from config import sway
+from config import alacritty, sway
 from utils.config import ConfigEditor
 from utils.env import is_exe
 from utils.ui import get_bg, select, yesno
@@ -31,7 +31,7 @@ def run(force_bg: bool = False):
         under = '# Your preferred terminal emulator'
         var = '$term'
         if is_exe('alacritty'):
-            cfg_edit.add(f'set {var} alacritty', under=under, start=True)
+            cfg_edit.add(f'set {var} {alacritty.command()}', under=under, start=True)
         elif is_exe('kitty'):
             cfg_edit.add(f'set {var} kitty', under=under, start=True)
         cfg_edit.add(
