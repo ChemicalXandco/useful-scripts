@@ -10,11 +10,17 @@ def run():
 
         under = '# fetch updates'
         cmds = []
+
         # Arch
         if is_exe('paru'):
             cmds.append('paru')
         elif is_exe('pacman'):
-            cmds.append('pacman -Syu')
+            cmds.append('sudo pacman -Syu')
+
+        # Debian
+        if is_exe('apt'):
+            cmds.append('sudo apt update')
+            cmds.append('sudo apt upgrade')
 
         if is_exe('flatpak'):
             cmds.append('flatpak update')
