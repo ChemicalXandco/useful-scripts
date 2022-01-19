@@ -22,6 +22,11 @@ def run():
             cmds.append('sudo apt update')
             cmds.append('sudo apt upgrade')
 
+        # Brew
+        if is_exe('brew'):
+            cmds.append('brew update')
+            cmds.append('brew upgrade')
+
         if is_exe('flatpak'):
             cmds.append('flatpak update')
 
