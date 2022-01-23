@@ -157,4 +157,4 @@ for i in available_package_managers:
 
 if not package_manager:
     raise RuntimeError('could not find a package manager')
-print(f'found package manager {package_manager}')
+print(f'found package manager {package_manager.name}')
