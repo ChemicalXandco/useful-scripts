@@ -40,7 +40,8 @@ def run():
         cfg_edit.add('    style: Bold Italic', under=h1)
         cfg_edit.add(f'    family: {font}', under=h1, allow_duplicates=True)
 
-        cfg_edit.add('background_opacity: 0.75')
+        h0 = 'window:'
+        cfg_edit.add('  opacity: 0.75', under=h0)
 
         h0 = 'key_bindings:'
         # spawn new instance in same directory
