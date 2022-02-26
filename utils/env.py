@@ -22,16 +22,21 @@ def run(*args: list[str]) -> str:
 
 def rm(path: str) -> bool:
     """
-    Remove the file at `path`
+    Remove `path`
 
     Args:
-        path: path of the file to remove
+        path: path to remove
     Returns:
-        bool: if the file existed
+        bool: if the path existed
     """
     if (exists := os.path.isfile(path)):
         os.remove(path)
+    elif (exists := os.path.isdir(path)):
+        shutil.rmtree(path)
+
+    if exists:
         print(f'Removed {path}')
+
     return exists
 
 

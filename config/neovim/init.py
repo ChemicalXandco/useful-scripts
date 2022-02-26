@@ -2,7 +2,7 @@ import os
 
 from config import neovim
 from utils.config import ConfigEditor
-from utils.env import is_exe
+from utils.env import dotfile_path, is_exe, rm
 from utils.info import get_version, Version
 
 
@@ -29,7 +29,12 @@ def run():
         cfg_edit.add('set smartindent', under='" try to be smart (increase the indenting level after ‘{’, decrease it after ‘}’, and so on):')
         cfg_edit.add('filetype plugin indent on', under='" use language‐specific plugins for indenting (better):')
 
-        cfg_edit.add('set noswapfile', under='" reduce disk writes')
+        under = '" reduce disk writes'
+        cfg_edit.add('set noswapfile', under=under)
+        rm(dotfile_path('.local/share/nvim/swap'))
+
+        cfg_edit.add('let g:netrw_dirhistmax=0', under=under)  # disable dir history
+        rm(dotfile_path('.local/share/nvim/.netrwhist'))
 
         lsp_1 = """\
 lua << EOF
