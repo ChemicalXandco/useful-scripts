@@ -6,7 +6,8 @@ from utils.env import is_exe
 def run():
     with ConfigEditor(bash.bashrc) as cfg_edit:
         under = '# power'
-        cfg_edit.add("alias s='shutdown now'", under=under)
+        if is_exe('systemctl'):
+            cfg_edit.add("alias s='systemctl poweroff'", under=under)
 
         under = '# fetch updates'
         cmds = []
