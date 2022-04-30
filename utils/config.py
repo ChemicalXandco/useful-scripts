@@ -35,13 +35,13 @@ class ConfigEditor:
             open(self._cfg_file, 'w').close()
             print(self._cfg_file, 'successfully created')
 
-        with open(self._cfg_file, 'r') as f:
+        with open(self._cfg_file, 'r', encoding='utf-8') as f:
             self._io = f.read()
 
         return self
 
     def __exit__(self, exc_type, exc_value, traceback):
-        with open(self._cfg_file, 'r+') as f:
+        with open(self._cfg_file, 'r+', encoding='utf-8') as f:
             if self._io != f.read():
                 f.seek(0) # reset after call to read()
                 f.write(self._io)

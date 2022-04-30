@@ -1,7 +1,17 @@
+import platform
+
 from config.neovim import init
 from utils.env import dotfile_path
 
-root = dotfile_path('.config/nvim')
+supported = True
+if platform.system() == 'Linux' or platform.system() == 'Darwin':
+    root = dotfile_path('.config/nvim')
+elif platform.system() == 'Windows':
+    root = dotfile_path('AppData/Local/nvim')
+else:
+    supported = False
+
 
 def run():
-    init.run()
+    if supported:
+        init.run()
