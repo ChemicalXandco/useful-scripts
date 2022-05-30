@@ -22,6 +22,9 @@ if is_exe('mako'):
 if is_exe('nvim'):
     from config import neovim
     neovim.run()
+if is_exe('pycodestyle'):
+    from config import pycodestyle
+    pycodestyle.run()
 if is_exe('python') or is_exe('python3'):
     from config import python
     python.run()
