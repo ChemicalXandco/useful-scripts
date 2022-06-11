@@ -1,6 +1,6 @@
 # useful-scripts
 
-Useful scripts for configuring many aspects of GNU/Linux
+Configurations for a wide range of software.
 
 # About
 
@@ -11,9 +11,14 @@ An advantage of managing the configs this way is that only the modifications are
 
 # Compatibility
 
+## Operating system
+
+Arch and Debian have first class support.
+Alpine, Gentoo, NixOS, OpenSUSE, Red Hat, MacOS, Windows, and derivatives should be usable also.
+
 ## Supported program configs
 
-bash, firefox, neovim, python
+all configurations are listed in [./config/](config/)
 
 # Requirements
 
