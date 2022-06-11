@@ -5,10 +5,6 @@ from utils.env import is_exe
 
 def run():
     with ConfigEditor(bash.bashrc) as cfg_edit:
-        under = '# power'
-        if is_exe('systemctl'):
-            cfg_edit.add("alias s='systemctl poweroff'", under=under)
-
         under = '# fetch updates'
         cmds = []
 
@@ -34,13 +30,6 @@ def run():
         cmds.sort()
         strcmds = ' && '.join(cmds)
         cfg_edit.add(f"alias u='{strcmds}'", under=under)
-
-        under = '# launch desktop'
-        if is_exe('sway'):
-            cfg_edit.add(
-                "alias l='exec systemctl --wait --user start sway.service'",
-                under=under,
-                )
 
 
 if __name__ == '__main__':

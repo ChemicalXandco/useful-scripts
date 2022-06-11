@@ -64,7 +64,7 @@ class ConfigEditor:
             text: the line(s) to add
             under: the line to add the content under as a regex
             start: add the line to the start of the file if `under` is not found
-            replace_matching: check if a similar statement to the content exists
+            replace_matching: check if a similar statement to the content exists before the provided string
             allow_duplicates: if `text` is detected but is not under `under`, \
                     create a new line under `under`
         """

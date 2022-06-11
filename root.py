@@ -13,6 +13,3 @@ if is_exe('makepkg'):
 if is_exe('pacman'):
     from config import pacman
     pacman.run()
-if is_exe('systemctl'):
-    from config import systemd
-    systemd.run()

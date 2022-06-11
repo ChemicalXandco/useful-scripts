@@ -51,6 +51,12 @@ def run(force_bg: bool = False):
                 under='# Start your launcher',
                 )
 
+        cfg_edit.add(
+                exec_cmd('$mod+Shift+e', "swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to shutdown?.' -b 'Yes, shutdown' 'poweroff'"),
+                under='# Exit sway (logs you out of your Wayland session)',
+                replace_matching='exec',
+                )
+
         default_bg = ('output * bg /usr/share/backgrounds/sway/Sway_Wallpaper_'
                       'Blue_1920x1080.png fill')
         if cfg_edit.exists(default_bg) or force_bg:
