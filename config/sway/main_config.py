@@ -76,6 +76,13 @@ def run(force_bg: bool = False):
                     replace_matching='bg'
                 )
 
+        # keyboard layout must be defined in this file else non us+qwerty layouts will not work properly
+        if not cfg_edit.exists('xkb_layout'):
+            layout = input('enter valid code for keyboard layout (e.g. us, gb etc): ')
+
+            under = 'input * {'
+            cfg_edit.add(f'    xkb_layout "{layout}"', under=under, enclose='}')
+
         under = 'bar {'
         cfg_edit.remove('    position top')
         cfg_edit.add('    position bottom', under=under)

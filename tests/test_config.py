@@ -115,11 +115,13 @@ b = 2
 
 
 def test_add():
+    # entry already exists
     with heading as cfg_test:
         with ConfigEditor(_cfg_file) as cfg_edit:
             cfg_edit.add('a = 1')
         cfg_test._verify_cfg_file(heading.cfg)
 
+    # entry already exists but is commented
     with heading as cfg_test:
         with ConfigEditor(_cfg_file) as cfg_edit:
             cfg_edit.add('b = 2')
@@ -127,9 +129,9 @@ def test_add():
 # options
 a = 1
 b = 2
-"""
-)
+""")
 
+    # entry set to different value
     with heading as cfg_test:
         with ConfigEditor(_cfg_file) as cfg_edit:
             cfg_edit.add('a = 2')
@@ -137,9 +139,9 @@ b = 2
 # options
 # b = 2
 a = 2
-"""
-)
+""")
 
+    # non-existent entry
     with heading as cfg_test:
         with ConfigEditor(_cfg_file) as cfg_edit:
             cfg_edit.add('c = 3', under='# options')
@@ -148,9 +150,9 @@ a = 2
 c = 3
 a = 1
 # b = 2
-"""
-)
+""")
 
+    # non-existent header
     with heading as cfg_test:
         with ConfigEditor(_cfg_file) as cfg_edit:
             cfg_edit.add('c = 3', under='# nonexistent options')
@@ -160,9 +162,9 @@ a = 1
 # b = 2
 # nonexistent options
 c = 3
-"""
-)
+""")
 
+    # place at top of file
     with heading as cfg_test:
         with ConfigEditor(_cfg_file) as cfg_edit:
             cfg_edit.add('c = 3', under='# nonexistent options', start=True)
@@ -172,8 +174,27 @@ c = 3
 # options
 a = 1
 # b = 2
-"""
-)
+""")
+
+    # new enclosed section
+    with TestConfig('a = 1\n') as cfg_test:
+        with ConfigEditor(_cfg_file) as cfg_edit:
+            cfg_edit.add('    b: "2"', under='enclosed section {', enclose='}')
+        cfg_test._verify_cfg_file("""a = 1
+enclosed section {
+    b: "2"
+}
+""")
+
+    # append to existing enclosed section
+    with TestConfig('enclosed section {\n    a: "1"\n}\n') as cfg_test:
+        with ConfigEditor(_cfg_file) as cfg_edit:
+            cfg_edit.add('    b: "2"', under='enclosed section {', enclose='}')
+        cfg_test._verify_cfg_file("""enclosed section {
+    b: "2"
+    a: "1"
+}
+""")
 
 
 def test_exists():

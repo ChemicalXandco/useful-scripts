@@ -49,8 +49,13 @@ class ConfigEditor:
                 print('Successfully edited', self._cfg_file)
 
     @get_index
-    def add(self, text: str, under: str = '', start: bool = False,
-            replace_matching: str = '=', allow_duplicates: bool = False,
+    def add(self,
+            text: str,
+            under: str = '',
+            start: bool = False,
+            replace_matching: str = '=',
+            allow_duplicates: bool = False,
+            enclose: str = '',
             index: int = -1):
         """
         Add a line.
@@ -65,8 +70,8 @@ class ConfigEditor:
             under: the line to add the content under as a regex
             start: add the line to the start of the file if `under` is not found
             replace_matching: check if a similar statement to the content exists before the provided string
-            allow_duplicates: if `text` is detected but is not under `under`, \
-                    create a new line under `under`
+            allow_duplicates: if `text` is detected but is not under `under`, create a new line under `under`
+            enclose: append this string on a new line under `text` *only* if `under` does not exist
         """
         if self._is_comment(index):
             self.uncomment(text)
@@ -95,6 +100,9 @@ class ConfigEditor:
                 self._insert(heading, insert_point)
                 insert_point += len(heading)
                 print('Made new heading:', under)
+
+                if enclose:
+                    self._insert(enclose+'\n', insert_point)
 
         self._insert(text+'\n', insert_point)
         print(f'Added line " {text} "')
