@@ -197,6 +197,23 @@ enclosed section {
 """)
 
 
+def test_add_lines():
+    with heading as cfg_test:
+        with ConfigEditor(_cfg_file) as cfg_edit:
+            cfg_edit.add_lines(
+                'a = 1',
+                'b = 2',
+                'c = 3',
+                under='# options'
+            )
+        cfg_test._verify_cfg_file("""
+# options
+a = 1
+b = 2
+c = 3
+""")
+
+
 def test_exists():
     with heading as _:
         with ConfigEditor(_cfg_file) as cfg_edit:

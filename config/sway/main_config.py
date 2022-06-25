@@ -71,10 +71,18 @@ def run(force_bg: bool = False):
                         default='fill')
                 cfg_edit.add(
                     f'output * bg {new_bg} {mode}',
-                    under=('# Default wallpaper (more resolutions are availabl'
-                           'e in /usr/share/backgrounds/sway/)'),
+                    under='# Default wallpaper (more resolutions are available in /usr/share/backgrounds/sway/)',
                     replace_matching='bg'
                 )
+
+        # enable swayidle
+        cfg_edit.add_lines(
+            "exec swayidle -w \\",
+            "         timeout 300 'swaylock -f -c 000000' \\",
+            "         timeout 600 'swaymsg \"output * dpms off\"' resume 'swaymsg \"output * dpms on\"' \\",
+            "         before-sleep 'swaylock -f -c 000000'",
+            under='### Idle configuration'
+        )
 
         # keyboard layout must be defined in this file else non us+qwerty layouts will not work properly
         if not cfg_edit.exists('xkb_layout'):

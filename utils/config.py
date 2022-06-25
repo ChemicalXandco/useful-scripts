@@ -107,6 +107,14 @@ class ConfigEditor:
         self._insert(text+'\n', insert_point)
         print(f'Added line " {text} "')
 
+    def add_lines(self, *lines, under: str = '', **options):
+        """
+        Applies add sequentially to strings passed with the previous string passed as the `under` argument.
+        """
+        for line in lines:
+            self.add(line, under=under, **options)
+            under = line
+
     @get_index
     def exists(self, text: str, include_comments: bool = False, index: int = -1) -> bool:
         """
