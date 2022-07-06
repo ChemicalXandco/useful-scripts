@@ -1,9 +1,9 @@
-from files import File
+from common import File
 
-f_list = {
+wallpapers = {
     'macOS': [
         File(name='macOS_10.0_Cheetah_default_5K.jpg', url='https://512pixels.net/downloads/macos-wallpapers/10-0_10.1.png'),
-        File(name='macOS_10.0_Cheetah_default_6K.jpg', url='https://512pixels.net/downloads/macos-wallpapers-6k/10-0_10-1-6k.jpg'), # 10.1 Puma shares the same wallpaper
+        File(name='macOS_10.0_Cheetah_default_6K.jpg', url='https://512pixels.net/downloads/macos-wallpapers-6k/10-0_10-1-6k.jpg'),  # 10.1 Puma shares the same wallpaper
         File(name='macOS_10.2_Jaguar_default_5K.jpg', url='https://512pixels.net/downloads/macos-wallpapers/10-2.png'),
         File(name='macOS_10.2_Jaguar_default_6K.jpg', url='https://512pixels.net/downloads/macos-wallpapers-6k/10-2-6k.jpg'),
         File(name='macOS_10.3_Panther_default_5K.jpg', url='https://512pixels.net/downloads/macos-wallpapers/10-3.png'),

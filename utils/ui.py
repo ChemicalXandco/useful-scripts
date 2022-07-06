@@ -1,7 +1,7 @@
 import os
 from typing import Union
 
-from files import File, wallpapers
+from common import File, wallpaper
 from utils.env import dotfile_path
 
 
@@ -39,7 +39,7 @@ def get_bg(default_files: list[str] = []):
         idx = base_opts.index(src)
         if idx in range(2):
             if idx == 0:
-                f = browse(wallpapers.f_list)
+                f = browse(wallpaper.wallpapers)
             else:
                 f_url = input('url (enter to go back): ')
                 if not f_url:
