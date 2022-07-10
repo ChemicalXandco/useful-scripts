@@ -19,6 +19,9 @@ if is_exe('firefox'):
 if is_exe('git'):
     from config import git
     git.run()
+if is_exe('hx') or is_exe('helix'):
+    from config import helix
+    helix.run()
 if is_exe('mako'):
     from config import mako
     mako.run()

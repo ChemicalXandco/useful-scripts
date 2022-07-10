@@ -40,6 +40,16 @@ def rm(path: str) -> bool:
     return exists
 
 
+def ln(target, link_name):
+    """
+    Create a symbolic link `link_name` that points to `target`
+    """
+    if not os.path.islink(link_name):
+        rm(link_name)
+        os.symlink(target, link_name)
+        print(f'created symlink {link_name} -> {target}')
+
+
 def dotfile_path(fname: str) -> str:
     """Get the full path of a dotfile in the ~/ directory."""
     return str(pathlib.Path(f'~/{fname}').expanduser())
