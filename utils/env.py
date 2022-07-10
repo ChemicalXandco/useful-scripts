@@ -15,7 +15,7 @@ def cpu_name() -> str:
     return model_name[model_name.find(':')+2:-1]
 
 
-def run(*args: list[str]) -> str:
+def run(*args: tuple[str, ...]) -> str:
     res = subprocess.check_output(args)
     return res.decode('utf-8')
 

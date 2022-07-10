@@ -14,9 +14,9 @@ class Exe:
     An executable file accessible on $PATH
     """
 
-    def __init__(self, name: str, *args: list[str]):
+    def __init__(self, name: str, *args: tuple[str, ...]):
         self.name = name
-        self.args = args
+        self.args = list(args)
 
     def _can_run(func):
         def inner(self, *args, **kwargs):
@@ -37,7 +37,7 @@ class Exe:
         return is_exe(self.name)
 
     @_can_run
-    def run(self, *args: list[str]) -> str:
+    def run(self, *args: tuple[str, ...]) -> str:
         run(self.name, *self.args, *args)
 
 

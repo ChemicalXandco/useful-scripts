@@ -66,7 +66,7 @@ def get_editor() -> str:
     try:
         return os.environ['EDITOR']
     except KeyError:
-        for i in group_exe.editors:
+        for i in group_exe.editors.values():
             if i.exists:
                 print(f'selecting {i.name} as editor')
                 return i.command
