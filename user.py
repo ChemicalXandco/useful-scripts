@@ -16,6 +16,9 @@ if is_exe('bash'):
 if is_exe('firefox'):
     from config import firefox
     firefox.run()
+if is_exe('git'):
+    from config import git
+    git.run()
 if is_exe('mako'):
     from config import mako
     mako.run()

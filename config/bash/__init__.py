@@ -1,8 +1,8 @@
 from config.bash import (
-        alias, alternative, arguments, git, history, neovim, profile, prompt,
+        alias, alternative, arguments, history, neovim, profile, prompt,
         python,
         )
-from utils.env import dotfile_path, is_exe
+from utils.env import dotfile_path
 
 profile_path = dotfile_path('.bash_profile')
 bashrc = dotfile_path('.bashrc')
@@ -12,8 +12,6 @@ def run():
     alias.run()
     alternative.run()
     arguments.run()
-    if is_exe('git'):
-        git.run()
     history.run()
     neovim.run()
     profile.run()

@@ -2,7 +2,7 @@ from collections import namedtuple
 import os
 from typing import Optional, Union
 
-from common import File, Url, group_url
+from common import File, Url, group_url, group_exe
 from utils.env import dotfile_path
 
 
@@ -60,6 +60,19 @@ def get_bg(default_files: list[str] = []) -> File:
             if not path:
                 continue
             return File(path=path)
+
+
+def get_editor() -> str:
+    try:
+        return os.environ['EDITOR']
+    except KeyError:
+        for i in group_exe.editors:
+            if i.exists:
+                print(f'selecting {i.name} as editor')
+                return i.command
+        print('could not find any editors on $PATH')
+
+        return input('enter command to launch text editor: ')
 
 
 def input_with_default(prompt, default):
