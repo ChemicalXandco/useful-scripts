@@ -2,55 +2,6 @@ from abc import ABC, abstractmethod
 from subprocess import CalledProcessError
 
 from utils.env import is_exe, run
-from utils.ui import yesno
-
-
-class PackageList:
-    def __init__(self, *packages):
-        self._packages = packages
-
-    def propose(self):
-        previous_response = None
-        packages_to_install = []
-        for i in self._packages:
-            previous_response = i.propose(previous_response)
-            if i.to_install:
-                packages_to_install.append(i.name)
-            if i.to_install or (i.installed and i.name):
-                packages_to_install += i.depends.propose()
-        return packages_to_install
-
-    def add(self, *packages):
-        self._packages += packages
-
-
-class Package:
-    def __init__(self, name, **kwargs):
-        self.name = kwargs.get(package_manager.name, name)
-        self.depends = PackageList()
-
-    @property
-    def installed(self):
-        if not self.name:
-            return True  # fake being installed so that this package is ignored
-        else:
-            return package_manager.is_installed(self.name)
-
-    def propose(self, previous_response: None):
-        if self.installed:
-            self.to_install = False
-            return previous_response
-        if previous_response is not None:
-            self.to_install = previous_response
-            return previous_response
-
-        response = yesno(f'Install {self.name}?')
-        self.to_install = response.result
-        return self.to_install if response.all else None
-
-    def depend(self, *args):
-        self.depends.add(*args)
-        return self
 
 
 class PackageManager(ABC):

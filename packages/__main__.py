@@ -1,3 +1,3 @@
 import packages
 
-packages.run()
+packages.install()

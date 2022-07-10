@@ -5,7 +5,7 @@ if not is_root():
 
 import packages
 if packages.package_manager.root:
-    packages.run()
+    packages.install()
 
 if is_exe('makepkg'):
     from config import makepkg
