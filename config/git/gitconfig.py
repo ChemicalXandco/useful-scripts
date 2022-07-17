@@ -7,6 +7,7 @@ def run():
     with ConfigEditor(git.gitconfig_path) as cfg_edit:
         under = '[core]'
         cfg_edit.add(f'    editor = {get_editor()}', under=under)
+        cfg_edit.add('    whitespace = trailing-space,space-before-tab', under=under)
 
         # https://git-scm.com/book/en/v2/Git-Basics-Git-Aliases
         under = '[alias]'
