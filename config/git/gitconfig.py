@@ -16,6 +16,9 @@ def run():
         cfg_edit.add('    al = !git add . && git diff --cached', under=under)
         # commit with message
         cfg_edit.add('    cm = commit -m', under=under)
+        # git cm "squash! 9d3ac05"
+        # git squash HEAD~[no. commits]
+        cfg_edit.add('    squash = rebase --autosquash -i', under=under)
 
 
 if __name__ == '__main__':
