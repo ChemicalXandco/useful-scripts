@@ -6,7 +6,9 @@ from utils.config import ConfigEditor
 from utils.env import is_exe
 from utils.ui import get_bg, select, yesno
 
-default_wallpapers = [
+CMD_LOCK = 'swaylock -f -c 000000'
+
+DEFAULT_WALLPAPERS = [
     '/usr/share/backgrounds/sway/Sway_Wallpaper_Blue_768x1024.png',
     '/usr/share/backgrounds/sway/Sway_Wallpaper_Blue_768x1024_Portrait.png',
     '/usr/share/backgrounds/sway/Sway_Wallpaper_Blue_1136x640.png',
@@ -34,10 +36,7 @@ def run(force_bg: bool = False):
             cfg_edit.add(f'set {var} {alacritty.command()}', under=under, start=True)
         elif is_exe('kitty'):
             cfg_edit.add(f'set {var} kitty', under=under, start=True)
-        cfg_edit.add(
-                exec_cmd('$mod+Return', var),
-                under='# Start a terminal',
-                )
+        cfg_edit.add(exec_cmd('$mod+Return', var), under='# Start a terminal')
 
         under = ('# Your preferred application launcher\n'
                  '# Note: pass the final command to swaymsg so that the result'
@@ -46,29 +45,28 @@ def run(force_bg: bool = False):
         var = '$menu'
         if is_exe('wofi'):
             cfg_edit.add(f'set {var} wofi --show run', under=under, start=True)
-        cfg_edit.add(
-                exec_cmd('$mod+d', var),
-                under='# Start your launcher',
-                )
+        cfg_edit.add(exec_cmd('$mod+d', var), under='# Start your launcher')
+
+        # all other usages of l are in the window movements
+        cfg_edit.add(exec_cmd('$mod+Ctrl+l', CMD_LOCK), under='# lock')
 
         cfg_edit.add(
-                exec_cmd('$mod+Shift+e', "swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to shutdown?.' -b 'Yes, shutdown' 'poweroff'"),
-                under='# Exit sway (logs you out of your Wayland session)',
-                replace_matching='exec',
-                )
+            exec_cmd('$mod+Shift+e', "swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to shutdown?.' -B 'Yes, shutdown' 'poweroff'"),
+            under='# Exit sway (logs you out of your Wayland session)',
+            replace_matching='exec',
+        )
 
-        default_bg = ('output * bg /usr/share/backgrounds/sway/Sway_Wallpaper_'
-                      'Blue_1920x1080.png fill')
-        if cfg_edit.exists(default_bg) or force_bg:
+        if cfg_edit.exists(f'output * bg {DEFAULT_WALLPAPERS[5]} fill') or force_bg:
             if yesno('change the background?').result:
-                new_bg = get_bg(default_wallpapers)
+                new_bg = get_bg(DEFAULT_WALLPAPERS)
                 mode = select(
-                        'stretch',
-                        'fill',
-                        'fit',
-                        'center',
-                        'tile',
-                        default='fill')
+                    'stretch',
+                    'fill',
+                    'fit',
+                    'center',
+                    'tile',
+                    default='fill',
+                )
                 cfg_edit.add(
                     f'output * bg {new_bg} {mode}',
                     under='# Default wallpaper (more resolutions are available in /usr/share/backgrounds/sway/)',
@@ -78,9 +76,12 @@ def run(force_bg: bool = False):
         # enable swayidle
         cfg_edit.add_lines(
             "exec swayidle -w \\",
-            "         timeout 300 'swaylock -f -c 000000' \\",
-            "         timeout 600 'swaymsg \"output * dpms off\"' resume 'swaymsg \"output * dpms on\"' \\",
-            "         before-sleep 'swaylock -f -c 000000'",
+            # lock after 5 minutes
+            f"         timeout 300 '{CMD_LOCK}' \\",
+            # turn off screen after 10 minutes
+            "         timeout 600 'swaymsg \"output * power off\"' resume 'swaymsg \"output * power on\"' \\",
+            # lock on sleep
+            f"         before-sleep '{CMD_LOCK}'",
             under='### Idle configuration'
         )
 
@@ -97,9 +98,9 @@ def run(force_bg: bool = False):
 
         if is_exe('grim') and is_exe('slurp') and is_exe('wl-copy'):
             cfg_edit.add(
-                    exec_cmd('$mod+Shift+s', 'grim -g "$(slurp)" - | wl-copy'),
-                    under='# take a screenshot and copy to clipboard'
-                    )
+                exec_cmd('$mod+Shift+s', 'grim -g "$(slurp)" - | wl-copy'),
+                under='# take a screenshot and copy to clipboard'
+            )
 
         cfg_edit.add('default_border none')
         cfg_edit.add('include /etc/sway/config.d/*')
